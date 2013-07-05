@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" ng-app="Photowell">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test</title>
+
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/cssextras/master/css/cssextras.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography-core.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography-responsive.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body class="app" ng-controller="MetaCtrl">
+        <div class="overlay csstype">
+            <div class="overlay__toolbox">
+                <div class="pure-g-r">
+                    <div class="pure-u-1">
+                        <div class="l-box ribbon">
+                            <h2>Get started now.</h2>
+                            <a href="#" class="pure-button primary-button" ng-click="login()">Sign up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay__image"></div>
+        </div>
+
+        <div class="csstype pure-g-r">
+            <div class="header pure-u-1">
+                <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
+                    <ul class="nav nav__center">
+                        <li class="pure-menu-selected"><a href="#/user">{{name}}</a></li>
+                        <li><a href="#/stream">Stream</a></li>
+                        <li><a href="#/friends">Freunde</a></li>
+                        <li><a href="#/albums">Alben</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div ng-view></div>
+        </div>
+        <script src="https://connect.facebook.net/de_DE/all.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.fancybox.pack.js" type="text/javascript"></script>
+        <script src="js/jquery.freetile.min.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>

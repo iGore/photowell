@@ -1,0 +1,14 @@
+<div class="pure-u-1" when-scrolled="check()"> 
+    <div class="container">
+        <div class="item" ng-repeat="image in images" photo-wall>
+            <div class="item__content">
+                <div class="item__image">
+                    <a href="{{image.src_large}}" class="fancybox" rel="gallery" title="{{image.name}}">
+                        <img ng-src="{{image.src}}" alt="">
+                    </a>
+                </div>
+                <div class="item__title">{{image.name}}</div>
+            </div>
+        </div>
+    </div>
+</div>

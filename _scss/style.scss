@@ -1,0 +1,135 @@
+body {
+    margin: 0 auto;
+    line-height: 1.7em;
+}
+
+.app {
+    background: #eee;
+}
+
+
+a {
+    color: #3B8BBA;
+    text-decoration: none;
+}
+
+.l-box {
+    padding: 1em;
+}
+
+
+.header {
+    margin: 0 0;
+}
+
+    .header .pure-menu {
+        padding: 0.5em;
+    }
+
+        .header .pure-menu li a:hover,
+        .header .pure-menu li a:focus {
+            background: none;
+            border: none;
+            color: #aaa;
+        }
+
+body .primary-button {
+    background: #02a6eb;
+    color: #fff;
+}
+
+.splash {
+    margin: 2em auto 0;
+    padding: 2em 0.5em 0;
+    background: #eee;
+}
+    .splash .splash-subhead {
+        color: #999;
+        font-weight: 300;
+        line-height: 1.4em;
+    }
+    .splash .primary-button {
+        font-size: 150%;
+    }
+
+.content {
+    background: #FFF;
+}
+
+.content .content-ribbon {
+    margin: 3em;
+    border-bottom: 1px solid #eee;
+}
+
+.ribbon {
+    background: #eee;
+    text-align: center;
+    padding: 2em;
+    color: #999;
+}
+    .ribbon h2 {
+        display: inline;
+        font-weight: normal;
+    }
+
+.footer {
+    background: #111;
+    text-align: center;
+    padding: 1em;
+    bottom: 0;
+}
+
+.l-centered {
+    text-align: center;
+}
+
+.container {
+    margin-top: 2em;
+    padding-top: 2em;
+}
+
+.item {
+    width: percentage(1 / 6);
+
+    .item__content {
+        margin: 10px;
+        padding: 10px;
+        border: solid 1px #B7B7B7;
+        background-color: #fff;
+
+        .item__image {
+            text-align: center;
+        }
+    }
+}
+
+.nav__center {
+    width: 100%;
+    text-align: center;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background-color: #fff;
+
+    .overlay__toolbar {
+        background: #eee;
+        color: #999;
+        font-weight: 300;
+        line-height: 1.4em;
+        font-size: 150%;
+        border-bottom: 1px solid #B7B7B7;
+    }
+
+    .overlay__image {
+        width: 100%;
+        height: 100%;
+        background: url(/images/uncle-sam.jpg) no-repeat center center fixed;
+    }
+}
