@@ -1,0 +1,14 @@
+albums.html<div class="pure-u-1 scroll" when-scrolled="Albums"> 
+    <div class="container">
+        <div class="item" ng-repeat="photo in photos" photo-wall>
+            <div class="item__content">
+                <div class="item__image">
+                    <a href="{{photo.src_large}}" class="fancybox" rel="gallery" title="{{photo.name}}">
+                        <img ng-src="{{photo.src}}" alt="">
+                    </a>
+                </div>
+                <div class="item__title">{{photo.name}}</div>
+            </div>
+        </div>
+    </div>
+</div>

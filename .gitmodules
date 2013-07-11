@@ -1,0 +1,3 @@
+[submodule "vendor/perfect-scrollbar"]
+	path = vendor/perfect-scrollbar
+	url = https://github.com/noraesae/perfect-scrollbar.git
