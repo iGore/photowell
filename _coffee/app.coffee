@@ -333,7 +333,8 @@ MetaCtrl = ($scope, $location, User, Friends, Albums, Overlay)->
             User.set 'username', user.username
             User.set 'user_photos_data_raw', user.photos.data
             
-            angular.forEach user.albums.data, (album)-> User.merge 'user_photos_data_raw', album.photos.data
+            if user.albums.data.length is 0
+                angular.forEach user.albums.data, (album)-> User.merge 'user_photos_data_raw', album.photos.data
             
             $scope.friendsLoad(user.friends.data.pop())
             $scope.friendsLoad(user.friends.data.pop())

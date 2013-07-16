@@ -434,9 +434,11 @@ MetaCtrl = function($scope, $location, User, Friends, Albums, Overlay) {
       User.set('name', user.name);
       User.set('username', user.username);
       User.set('user_photos_data_raw', user.photos.data);
-      angular.forEach(user.albums.data, function(album) {
-        return User.merge('user_photos_data_raw', album.photos.data);
-      });
+      if (user.albums.data.length === 0) {
+        angular.forEach(user.albums.data, function(album) {
+          return User.merge('user_photos_data_raw', album.photos.data);
+        });
+      }
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
