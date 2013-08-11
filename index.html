@@ -1,172 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" ng-app="Photowell">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Test</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css">
-        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/cssextras/master/css/cssextras.css">
-        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography-core.css">
-        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography.css">
-        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/csstypography/master/css/typography-responsive.css">
-        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/style.css">
+        <title>Fixed Top Navbar Example for Bootstrap</title>
+
+        <link rel="stylesheet" type="text/css" href="/components/bootstrap-theme-white-plum/dist/css/bootstrap.min.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/components/fancybox/source/jquery.fancybox.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/components/scrollup/css/themes/image.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />
     </head>
-    <body>
-        <div class="content csstype pure-g-r">
-            <div class="header pure-u-1">
-                <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
-                    <a class="pure-menu-heading" href="">Photowell</a>
 
-                    <ul class="nav">
-                        <li class="pure-menu-selected"><a href="#home">Home</a></li>
-                        <li><a href="#consumer">Consumer</a></li>
-                        <li><a href="#technology">Technology</a></li>
-                        <li><a href="#about">About</a></li>
-                    </ul>
-                </div>
-            </div>
+    <body class="app" ng-controller="MetaCtrl">
+        <div class="navbar navbar-fixed-top">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img ng-src="{{picture}}" height="18" alt="{{name}}" title="{{name}}" class="img-circle">
+            </a>
+            <ul class="nav navbar-nav">
+                <li ng-class="getClass('/user')"><a href="#/user">{{name}}</a></li>
+                <li ng-class="getClass('/friends')"><a href="#/friends">Freunde {{$location.path()}}</a></li>
+                <li ng-class="getClass('/albums')"><a href="#/albums">Alben</a></li>
+            </ul>
+        </div>
 
-            <div class="splash pure-u-1">
-                <div class="pure-g-r">
-                    <div class="pure-u-1-3">
-                        <div class="l-box splash-image">
-                            <img src="http://placehold.it/500x350"
-                                 alt="Placeholder image for example.">
-                        </div>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center">Get started now.</h4>
                     </div>
-
-                    <div class="pure-u-2-3">
-                        <div class="l-box splash-text">
-                            <h1 id="home" class="splash-head">
-                                Some big bold text.
-                            </h1>
-                            <h2 class="splash-subhead">
-                                Lasse deinen visuelen Gaumen verwöhnen.
-                            </h2>
-                            <p>
-                                <a href="app.html" class="pure-button primary-button">Alter, das will ich!</a>
-                            </p>
-                        </div>
+                    <div class="modal-body">
+                        <button type="button" class="btn btn-info btn-block" ng-click="login()">Sign up</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="content pure-u-1">
-                <div class="pure-g-r content-ribbon">
-                    <div class="content pure-u-1">
-                        <h4 id="consumer" class="subhead">Consumer</h4>
-                        <h3>Was unsere Kunden dazu sagen....</h3>
-                    </div>
-
-                    <div class="pure-u-1-4">
-                        <div class="l-box">
-                            <blockquote>
-                                "Donec suscipit, risus vel venenatis ornare, nibh massa ultrices diam, a elementum metus felis sit amet eros. Phasellus pellentesque euismod massa sed pellentesque."
-                                <cite title="citation">Anonymous</cite>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <div class="pure-u-1-4">
-                        <div class="l-box">
-                            <blockquote>
-                                "Donec suscipit, risus vel venenatis ornare, nibh massa ultrices diam, a elementum metus felis sit amet eros. Phasellus pellentesque euismod massa sed pellentesque."
-                                <cite title="citation">Anonymous</cite>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <div class="pure-u-1-4">
-                        <div class="l-box">
-                            <blockquote>
-                                "Donec suscipit, risus vel venenatis ornare, nibh massa ultrices diam, a elementum metus felis sit amet eros. Phasellus pellentesque euismod massa sed pellentesque."
-                                <cite title="citation">Anonymous</cite>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <div class="pure-u-1-4">
-                        <div class="l-box">
-                            <blockquote>
-                                "Dieser Mann ist ein Magier am Keyboard!"  
-                                <cite title="citation">Anonymous</cite>
-                            </blockquote>                          
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pure-g-r content-ribbon">
-                    <div class="pure-u-1">
-                        <div class="l-box">
-                            <h4 id="technology" class="subhead">Technology</h4>
-
-                            <h3>Unter der Haube...</h3>
-                            <p>
-                                <a href="https://github.com/davist11/jQuery-One-Page-Nav">jQuery One Page Nav</a><br>
-                                <a href="http://purecss.io">Pure</a><br>
-                                <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a><br>
-                                <a href="http://angularjs.org/">AngularJS</a><br>
-                                <a href="http://fancybox.net/">fancybox</a><br>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pure-g-r l-box">
-                    <div class="pure-u-1-4">
-                        <div class="l-box l-centered">
-                            <a href="#">
-                                <img src="http://profile.ak.fbcdn.net/hprofile-ak-ash4/370231_100005733254075_879820565_n.jpg" alt="" class="yui3-img-eliptical"> 
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="pure-u-3-4">
-                        <div class="l-box">
-                            <h4 id="about" class="subhead">About</h4>
-
-                            <h3>Diese App ist dem jungen und Austrebenden Informatiker.... geschuldet.</h3>
-                            <p>
-                                Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum. Morbi fermentum dui sit amet libero tincidunt rutrum. Nam sodales consequat metus sed accumsan. 
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content pure-u-1">
-                <div class="l-box ribbon pure-menu pure-menu-open pure-menu-horizontal">
-                    <ul class="nav">
-                        <li><a href="#"><i class="icon-2x icon-facebook "></i></a></li>
-                        <li><a href="#"><i class="icon-2x icon-google-plus"></i></a></li>
-                        <li><a href="#"><i class="icon-2x icon-github"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer pure-u-1">
-                View the source of this layout to learn more. Made with love by the YUI Team.
             </div>
         </div>
 
-        <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="js/jquery.nav.js"></script>
-        <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
-        <script>
-            $(function () {
-                $('.nav').onePageNav({
-                    currentClass: 'pure-menu-selected',
-                    changeHash: false,
-                    scrollSpeed: 750,
-                    scrollOffset: 100,
-                    scrollThreshold: 0.5,
-                    filter: '',
-                    easing: 'swing'
-                });
-            });
-        </script>
+        <div class="wrapper" when-scrolled>
+            <div ng-view></div>
+        </div>
+
+        <script type="text/javascript" src="https://connect.facebook.net/de_DE/all.js"></script>
+        <script type="text/javascript" src="/components/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/components/angular/angular.min.js"></script>
+        <script type="text/javascript" src="/components/freetile/jquery.freetile.min.js"></script>
+        <script type="text/javascript" src="/components/fancybox/source/jquery.fancybox.pack.js"></script>
+        <script type="text/javascript" src="/components/scrollup/js/jquery.scrollUp.min.js"></script>
+        <script type="text/javascript" src="/js/app.js"></script>
     </body>
 </html>

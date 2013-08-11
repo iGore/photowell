@@ -11,15 +11,16 @@ FB.init
 DOM ready
 ###
 angular.element(document).ready ->
-    $('.fancybox').fancybox {
+    $.scrollUp {
+        scrollImg: true
+    }
+
+    $('.fancybox').fancybox 
         openEffect: 'elastic' 
         closeEffect: 'elastic'
-        helpers: {
-            title: {
-                type: 'over'
-            }
-        }
-    }
+        helpers: 
+            title: 
+                type: 'over' 
 
 ###
 App: Photowell
@@ -31,12 +32,27 @@ Routes
 ###
 Photowell.config ($routeProvider)->
     $routeProvider.
-        when('/', controller: UserCtrl, templateUrl: 'views/user.html').
-        # when('/stream', controller: StreamCtrl, templateUrl: 'views/stream.html').
-        when('/friends', controller: FriendsCtrl, templateUrl: 'views/friends.html').
-        when('/albums', controller: AlbumsCtrl, templateUrl: 'views/albums.html').
+        when('/', controller: UserCtrl, templateUrl: 'views/wall.html').
+        when('/friends', controller: FriendsCtrl, templateUrl: 'views/wall.html').
+        when('/albums', controller: AlbumsCtrl, templateUrl: 'views/wall.html').
         otherwise(redirectTo:'/')
 
+###
+Filter
+###
+Photowell.filter 'truncate', ->
+    (text, length, end)->
+        return "" if not text?
+
+        length = 10 if isNaN(length)
+
+        end = "..." if not end?
+
+        if text.length <= length || text.length - end.length <= length
+            text
+        else 
+            String(text).substring(0, length-end.length) + end
+        
 ###
 Globale Funktionen    
 ###
@@ -140,19 +156,19 @@ Photowell.factory 'Friends', ($rootScope)->
             storage[key] = value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         push: (key, value, broadcast = true)->
             storage[key].push value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         merge: (key, value, broadcast = true)->
             $.merge storage[key], value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         get: (key)-> 
             storage[key]
@@ -239,25 +255,6 @@ Photowell.factory 'Albums', ($rootScope, Monitor)->
     }
 
 ###
-Overlay factory
-
-Speichert das Overlay Element, so das es nur einmal vorhanden ist und 
-von allen Controllern benutzt werden kann.
-###
-Photowell.factory 'Overlay', ($rootScope)->
-    overlay = null
-
-    return {
-        set: (value)->
-            overlay = value
-
-            return @
-
-        get: ()->
-            overlay
-    }
-
-###
 Monitor factory
 
 Stellt Monitor Objekte bereit um eine Synchrone 
@@ -286,6 +283,8 @@ Bilder neu anzuordnen bzw. die neu dazugekommen Bilder unten richtig anordnen.
 ###
 Photowell.directive 'photoWall', ($rootScope, $timeout)-> 
     (scope, element, attr)-> 
+        console.log 'photoWall'
+
         return if not scope.$last
 
         $timeout ->
@@ -309,32 +308,35 @@ Photowell.directive 'whenScrolled', (Monitor)->
 ###
 Meta Controller
 ###
-MetaCtrl = ($scope, $location, User, Friends, Albums, Overlay)->
-    Overlay.set $('.overlay') 
-
+MetaCtrl = ($scope, $location, User, Friends, Albums)->
     FB.getLoginStatus (response)-> 
         if response.status is 'connected'
             User.set 'access_token', response.authResponse.accessToken
         else
             $scope.$apply -> $location.path '/' if $location.$$path isnt '/'
             
-            Overlay.get().fadeIn()  
+            $('#myModal').modal()
 
     $scope.login = ->
         FB.login (response)->
             User.set 'access_token', response.authResponse.accessToken if response.authResponse
+            
+            $('#myModal').modal('hide')
         ,
         scope: 'email,user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags'
 
     $scope.init = ->
-        FB.api '/me?fields=name,username,albums.fields(photos.fields(name,images)),friends.fields(id),photos,picture.type(large)&access_token=' + User.get('access_token'), (user)->
+        FB.api '/me?fields=name,username,albums.fields(photos.fields(name,images)),friends.fields(id),photos,picture.type(small)&access_token=' + User.get('access_token'), (user)->
             User.set 'picture', user.picture.data.url
             User.set 'name', user.name
             User.set 'username', user.username
-            User.set 'user_photos_data_raw', user.photos.data
             
-            if user.albums.data.length is 0
-                angular.forEach user.albums.data, (album)-> User.merge 'user_photos_data_raw', album.photos.data
+            photos = user.photos.data
+
+            if user.albums.data.length isnt 0
+                angular.forEach user.albums.data, (album)-> $.merge photos, album.photos.data
+
+            User.set 'user_photos_data_raw', photos
             
             $scope.friendsLoad(user.friends.data.pop())
             $scope.friendsLoad(user.friends.data.pop())
@@ -348,17 +350,19 @@ MetaCtrl = ($scope, $location, User, Friends, Albums, Overlay)->
                 $scope.friendsLoad(user.friends.data.pop())
             , 1000
 
-            Overlay.get().fadeOut('slow')
-
     $scope.friendsLoad = (friend)->
-        FB.api '/' + friend.id + '?fields=name,images,photos,albums.fields(photos.fields(name,images))&access_token=' + User.get('access_token'), (friend)->
+        FB.api '/' + friend.id + '?fields=name,photos,albums.fields(photos.fields(name,images))&access_token=' + User.get('access_token'), (friend)->
             Friends.merge 'friends_photos_data_raw', friend.photos.data if friend.photos?
 
             if friend.albums?
                 angular.forEach friend.albums.data, (album)->  
                     Albums.merge 'albums_photos_data_raw', album.photos.data if album.photos?
 
+    $scope.getClass = (path)-> if $location.path().substr(0, path.length) == path then "active" else ""
+
     $scope.$on 'name', (events, name)-> $scope.$apply -> $scope.name = name    
+
+    $scope.$on 'picture', (events, picture)-> $scope.$apply -> $scope.picture = picture    
 
     $scope.$on 'access_token', -> $scope.init()
 
@@ -368,7 +372,7 @@ User Controller
 UserCtrl = ($scope, User, Monitor)->
     Monitor.set 'scope_in_use', $scope
 
-    $scope.container = $('.container')
+    $scope.container = $('.items')
 
     $scope.factory = User
 
@@ -400,24 +404,19 @@ UserCtrl = ($scope, User, Monitor)->
     $scope.factory.check() if User.get('user_photos_data_raw').length isnt 0
 
 ###
-Stream Controller
-###
-StreamCtrl = ($scope, User)->
-
-###
 Friends Controller
 ###
 FriendsCtrl = ($scope, Friends, Monitor)->
     Monitor.set 'scope_in_use', $scope
 
-    $scope.container = $('.container')
+    $scope.container = $('.items')
 
     $scope.factory = Friends
     
     if Friends.get('friends_photos').length isnt 0  
         $scope.factory.reset()
 
-    $scope.images = Friends.get 'friends_photos'
+    $scope.photos = Friends.get 'friends_photos'
 
     $scope.$on 'friends_photos', -> $scope.$apply() if not $scope.$$phase 
 
@@ -431,7 +430,7 @@ Album Controller
 AlbumsCtrl = ($scope, User, Albums, Friends, Monitor)->
     Monitor.set 'scope_in_use', $scope
 
-    $scope.container = $('.container')
+    $scope.container = $('.items')
 
     $scope.factory = Albums
 

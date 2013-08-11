@@ -3,7 +3,7 @@
 Facebook init
 */
 
-var AlbumsCtrl, FriendsCtrl, MetaCtrl, Photowell, StreamCtrl, UserCtrl;
+var AlbumsCtrl, FriendsCtrl, MetaCtrl, Photowell, UserCtrl;
 
 FB.init({
   appId: '544498978935917',
@@ -18,6 +18,9 @@ DOM ready
 
 
 angular.element(document).ready(function() {
+  $.scrollUp({
+    scrollImg: true
+  });
   return $('.fancybox').fancybox({
     openEffect: 'elastic',
     closeEffect: 'elastic',
@@ -44,16 +47,40 @@ Routes
 Photowell.config(function($routeProvider) {
   return $routeProvider.when('/', {
     controller: UserCtrl,
-    templateUrl: 'views/user.html'
+    templateUrl: 'views/wall.html'
   }).when('/friends', {
     controller: FriendsCtrl,
-    templateUrl: 'views/friends.html'
+    templateUrl: 'views/wall.html'
   }).when('/albums', {
     controller: AlbumsCtrl,
-    templateUrl: 'views/albums.html'
+    templateUrl: 'views/wall.html'
   }).otherwise({
     redirectTo: '/'
   });
+});
+
+/*
+Filter
+*/
+
+
+Photowell.filter('truncate', function() {
+  return function(text, length, end) {
+    if (!(text != null)) {
+      return "";
+    }
+    if (isNaN(length)) {
+      length = 10;
+    }
+    if (!(end != null)) {
+      end = "...";
+    }
+    if (text.length <= length || text.length - end.length <= length) {
+      return text;
+    } else {
+      return String(text).substring(0, length - end.length) + end;
+    }
+  };
 });
 
 /*
@@ -313,28 +340,6 @@ Photowell.factory('Albums', function($rootScope, Monitor) {
 });
 
 /*
-Overlay factory
-
-Speichert das Overlay Element, so das es nur einmal vorhanden ist und 
-von allen Controllern benutzt werden kann.
-*/
-
-
-Photowell.factory('Overlay', function($rootScope) {
-  var overlay;
-  overlay = null;
-  return {
-    set: function(value) {
-      overlay = value;
-      return this;
-    },
-    get: function() {
-      return overlay;
-    }
-  };
-});
-
-/*
 Monitor factory
 
 Stellt Monitor Objekte bereit um eine Synchrone
@@ -368,6 +373,7 @@ Bilder neu anzuordnen bzw. die neu dazugekommen Bilder unten richtig anordnen.
 
 Photowell.directive('photoWall', function($rootScope, $timeout) {
   return function(scope, element, attr) {
+    console.log('photoWall');
     if (!scope.$last) {
       return;
     }
@@ -404,8 +410,7 @@ Meta Controller
 */
 
 
-MetaCtrl = function($scope, $location, User, Friends, Albums, Overlay) {
-  Overlay.set($('.overlay'));
+MetaCtrl = function($scope, $location, User, Friends, Albums) {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
       return User.set('access_token', response.authResponse.accessToken);
@@ -415,46 +420,47 @@ MetaCtrl = function($scope, $location, User, Friends, Albums, Overlay) {
           return $location.path('/');
         }
       });
-      return Overlay.get().fadeIn();
+      return $('#myModal').modal();
     }
   });
   $scope.login = function() {
     return FB.login(function(response) {
       if (response.authResponse) {
-        return User.set('access_token', response.authResponse.accessToken);
+        User.set('access_token', response.authResponse.accessToken);
       }
+      return $('#myModal').modal('hide');
     }, {
       scope: 'email,user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags'
     });
   };
   $scope.init = function() {
-    return FB.api('/me?fields=name,username,albums.fields(photos.fields(name,images)),friends.fields(id),photos,picture.type(large)&access_token=' + User.get('access_token'), function(user) {
-      var int;
+    return FB.api('/me?fields=name,username,albums.fields(photos.fields(name,images)),friends.fields(id),photos,picture.type(small)&access_token=' + User.get('access_token'), function(user) {
+      var int, photos;
       User.set('picture', user.picture.data.url);
       User.set('name', user.name);
       User.set('username', user.username);
-      User.set('user_photos_data_raw', user.photos.data);
-      if (user.albums.data.length === 0) {
+      photos = user.photos.data;
+      if (user.albums.data.length !== 0) {
         angular.forEach(user.albums.data, function(album) {
-          return User.merge('user_photos_data_raw', album.photos.data);
+          return $.merge(photos, album.photos.data);
         });
       }
+      User.set('user_photos_data_raw', photos);
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
       $scope.friendsLoad(user.friends.data.pop());
-      int = setInterval(function() {
+      return int = setInterval(function() {
         if (user.friends.data.length === 0) {
           return clearInterval(int);
         }
         return $scope.friendsLoad(user.friends.data.pop());
       }, 1000);
-      return Overlay.get().fadeOut('slow');
     });
   };
   $scope.friendsLoad = function(friend) {
-    return FB.api('/' + friend.id + '?fields=name,images,photos,albums.fields(photos.fields(name,images))&access_token=' + User.get('access_token'), function(friend) {
+    return FB.api('/' + friend.id + '?fields=name,photos,albums.fields(photos.fields(name,images))&access_token=' + User.get('access_token'), function(friend) {
       if (friend.photos != null) {
         Friends.merge('friends_photos_data_raw', friend.photos.data);
       }
@@ -467,9 +473,21 @@ MetaCtrl = function($scope, $location, User, Friends, Albums, Overlay) {
       }
     });
   };
+  $scope.getClass = function(path) {
+    if ($location.path().substr(0, path.length) === path) {
+      return "active";
+    } else {
+      return "";
+    }
+  };
   $scope.$on('name', function(events, name) {
     return $scope.$apply(function() {
       return $scope.name = name;
+    });
+  });
+  $scope.$on('picture', function(events, picture) {
+    return $scope.$apply(function() {
+      return $scope.picture = picture;
     });
   });
   return $scope.$on('access_token', function() {
@@ -484,7 +502,7 @@ User Controller
 
 UserCtrl = function($scope, User, Monitor) {
   Monitor.set('scope_in_use', $scope);
-  $scope.container = $('.container');
+  $scope.container = $('.items');
   $scope.factory = User;
   $scope.monitor = Monitor.set('in_process', false);
   $scope.name = User.get('name');
@@ -526,25 +544,18 @@ UserCtrl = function($scope, User, Monitor) {
 };
 
 /*
-Stream Controller
-*/
-
-
-StreamCtrl = function($scope, User) {};
-
-/*
 Friends Controller
 */
 
 
 FriendsCtrl = function($scope, Friends, Monitor) {
   Monitor.set('scope_in_use', $scope);
-  $scope.container = $('.container');
+  $scope.container = $('.items');
   $scope.factory = Friends;
   if (Friends.get('friends_photos').length !== 0) {
     $scope.factory.reset();
   }
-  $scope.images = Friends.get('friends_photos');
+  $scope.photos = Friends.get('friends_photos');
   $scope.$on('friends_photos', function() {
     if (!$scope.$$phase) {
       return $scope.$apply();
@@ -565,7 +576,7 @@ Album Controller
 
 AlbumsCtrl = function($scope, User, Albums, Friends, Monitor) {
   Monitor.set('scope_in_use', $scope);
-  $scope.container = $('.container');
+  $scope.container = $('.items');
   $scope.factory = Albums;
   if (Albums.get('albums_photos').length !== 0) {
     $scope.factory.reset();

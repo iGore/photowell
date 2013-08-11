@@ -1,0 +1,19 @@
+{
+  "name": "photowell",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.0.7",
+    "bootstrap": "~3.0.0-rc1",
+    "fancybox": "~2.1.5",
+    "freetile": "git://github.com/yconst/Freetile.git",
+    "scrollup": "git://github.com/markgoodyear/scrollup.git",
+    "bootstrap-theme-white-plum": "~0.1.0"
+  }
+}

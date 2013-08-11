@@ -1,0 +1,12 @@
+<div class="items">
+    <div class="item" ng-repeat="photo in photos" photo-wall>
+        <div class="panel">
+            <p class="text-center">
+	            <a href="{{photo.src_large}}" class="fancybox" rel="gallery" title="{{photo.name}}">
+	                <img ng-src="{{photo.src}}" alt="" class="img-responsive img-rounded">
+	            </a>
+	        </p>
+            <div class="panel-footer text-muted" ng-show="photo.name">{{photo.name|truncate:40}}</div>
+        </div>
+    </div>
+</div>
