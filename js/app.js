@@ -438,7 +438,7 @@ MetaCtrl = function($scope, $location, User, Friends, Albums) {
       User.set('picture', user.picture.data.url);
       User.set('name', user.name);
       User.set('username', user.username);
-      photos = user.photos.data;
+      photos = user.photos.data.length !== 0 ? user.photos.data : [];
       if (user.albums.data.length !== 0) {
         angular.forEach(user.albums.data, function(album) {
           return $.merge(photos, album.photos.data);
