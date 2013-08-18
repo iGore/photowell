@@ -9,4 +9,8 @@
 
 /* line 10, ../_scss/style.scss */
 .navbar-fixed-top {
-  border-color: rgba(0, 0, 0, 0.15); }
+  border: none; }
+
+/* line 14, ../_scss/style.scss */
+.panel {
+  border: none; }

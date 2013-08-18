@@ -11,9 +11,8 @@ FB.init
 DOM ready
 ###
 angular.element(document).ready ->
-    $.scrollUp {
-        scrollImg: true
-    }
+    $.scrollUp scrollImg: true
+
 
     $('.fancybox').fancybox 
         openEffect: 'elastic' 
@@ -32,10 +31,10 @@ Routes
 ###
 Photowell.config ($routeProvider)->
     $routeProvider.
-        when('/', controller: UserCtrl, templateUrl: 'views/wall.html').
+        when('/user', controller: UserCtrl, templateUrl: 'views/wall.html').
         when('/friends', controller: FriendsCtrl, templateUrl: 'views/wall.html').
         when('/albums', controller: AlbumsCtrl, templateUrl: 'views/wall.html').
-        otherwise(redirectTo:'/')
+        otherwise(redirectTo:'/user')
 
 ###
 Filter
@@ -100,19 +99,19 @@ Photowell.factory 'User', ($rootScope)->
             storage[key] = value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         push: (key, value, broadcast = true)->
             storage[key].push value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         merge: (key, value, broadcast = true)->
             $.merge storage[key], value
             $rootScope.$broadcast key, value if broadcast
 
-            return @ 
+            @ 
 
         get: (key)->
             storage[key]
@@ -211,19 +210,19 @@ Photowell.factory 'Albums', ($rootScope, Monitor)->
             storage[key] = value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         push: (key, value, broadcast = true)->
             storage[key].push value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         merge: (key, value, broadcast = true)->
             $.merge storage[key], value
             $rootScope.$broadcast key, value if broadcast
 
-            return @
+            @
 
         get: (key)->
             storage[key]
@@ -268,7 +267,7 @@ Photowell.factory 'Monitor', ($rootScope)->
         set: (key, value)->
             monitor[key] = value
 
-            return @
+            @
 
         get: (key)->
             monitor[key]
@@ -283,13 +282,10 @@ Bilder neu anzuordnen bzw. die neu dazugekommen Bilder unten richtig anordnen.
 ###
 Photowell.directive 'photoWall', ($rootScope, $timeout)-> 
     (scope, element, attr)-> 
-        console.log 'photoWall'
-
         return if not scope.$last
 
         $timeout ->
-            scope.container.freetile
-                animate: true 
+            scope.container.freetile animate: true 
 
             $rootScope.monitor.set 'in_process', no
 
@@ -386,6 +382,8 @@ UserCtrl = ($scope, User, Monitor)->
 
     if User.get('user_photos').length isnt 0  
         $scope.factory.reset()
+    else 
+        $scope.factory.check()
 
     $scope.photos = User.get 'user_photos'
 
@@ -415,6 +413,8 @@ FriendsCtrl = ($scope, Friends, Monitor)->
     
     if Friends.get('friends_photos').length isnt 0  
         $scope.factory.reset()
+    else 
+        $scope.factory.check()
 
     $scope.photos = Friends.get 'friends_photos'
 
@@ -436,6 +436,8 @@ AlbumsCtrl = ($scope, User, Albums, Friends, Monitor)->
 
     if Albums.get('albums_photos').length isnt 0  
         $scope.factory.reset()
+    else 
+        $scope.factory.check()
 
     $scope.photos = Albums.get 'albums_photos'
 

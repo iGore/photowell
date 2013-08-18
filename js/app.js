@@ -45,7 +45,7 @@ Routes
 
 
 Photowell.config(function($routeProvider) {
-  return $routeProvider.when('/', {
+  return $routeProvider.when('/user', {
     controller: UserCtrl,
     templateUrl: 'views/wall.html'
   }).when('/friends', {
@@ -55,7 +55,7 @@ Photowell.config(function($routeProvider) {
     controller: AlbumsCtrl,
     templateUrl: 'views/wall.html'
   }).otherwise({
-    redirectTo: '/'
+    redirectTo: '/user'
   });
 });
 
@@ -373,7 +373,6 @@ Bilder neu anzuordnen bzw. die neu dazugekommen Bilder unten richtig anordnen.
 
 Photowell.directive('photoWall', function($rootScope, $timeout) {
   return function(scope, element, attr) {
-    console.log('photoWall');
     if (!scope.$last) {
       return;
     }
@@ -510,6 +509,8 @@ UserCtrl = function($scope, User, Monitor) {
   $scope.picture = User.get('picture');
   if (User.get('user_photos').length !== 0) {
     $scope.factory.reset();
+  } else {
+    $scope.factory.check();
   }
   $scope.photos = User.get('user_photos');
   $scope.$on('name', function(events, name) {
@@ -554,6 +555,8 @@ FriendsCtrl = function($scope, Friends, Monitor) {
   $scope.factory = Friends;
   if (Friends.get('friends_photos').length !== 0) {
     $scope.factory.reset();
+  } else {
+    $scope.factory.check();
   }
   $scope.photos = Friends.get('friends_photos');
   $scope.$on('friends_photos', function() {
@@ -580,6 +583,8 @@ AlbumsCtrl = function($scope, User, Albums, Friends, Monitor) {
   $scope.factory = Albums;
   if (Albums.get('albums_photos').length !== 0) {
     $scope.factory.reset();
+  } else {
+    $scope.factory.check();
   }
   $scope.photos = Albums.get('albums_photos');
   $scope.$on('albums_photos', function() {

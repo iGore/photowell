@@ -1,7 +1,7 @@
-<div class="items">
-    <div class="item" ng-repeat="photo in photos" photo-wall>
-        <div class="panel">
-            <p class="text-center">
+<div class="items" when-scrolled>
+    <div class="item" ng-repeat="photo in photos"  photo-wall>
+        <div class="panel panel-info">
+            <p class="text-center panel-body">
 	            <a href="{{photo.src_large}}" class="fancybox" rel="gallery" title="{{photo.name}}">
 	                <img ng-src="{{photo.src}}" alt="" class="img-responsive img-rounded">
 	            </a>

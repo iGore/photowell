@@ -3,11 +3,14 @@
 }
 
 .item {
-    width: percentage(1 / 5);
+    width: 20%;
     padding: 0 10px 0 10px;
 }
 
 .navbar-fixed-top {
-    // border-color: #70A2E2; 
-    border-color: rgba(0, 0, 0, 0.15); 
+    border: none; 
+}
+
+.panel {
+    border: none;
 }
