@@ -334,7 +334,7 @@ Photowell.factory('Albums', function($rootScope, Monitor) {
       var photos;
       photos = this.get('albums_photos');
       this.set('albums_photos', photos.slice(0, 20));
-      return this.set('albums_photos_data', $.merge(photos.slice(20), this.get('friends_photos_data')));
+      return this.set('albums_photos_data', $.merge(photos.slice(20), this.get('albums_photos_data')));
     }
   };
 });

@@ -13,7 +13,6 @@ DOM ready
 angular.element(document).ready ->
     $.scrollUp scrollImg: true
 
-
     $('.fancybox').fancybox 
         openEffect: 'elastic' 
         closeEffect: 'elastic'
@@ -249,7 +248,7 @@ Photowell.factory 'Albums', ($rootScope, Monitor)->
             photos = @get('albums_photos')
             @set 'albums_photos', photos[0..19]
 
-            @set 'albums_photos_data', $.merge photos[20..], @get 'friends_photos_data'
+            @set 'albums_photos_data', $.merge photos[20..], @get 'albums_photos_data'
 
     }
 
