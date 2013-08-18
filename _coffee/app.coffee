@@ -331,9 +331,7 @@ MetaCtrl = ($scope, $location, User, Friends, Albums)->
 
             if user.albums.data.length isnt 0
                 angular.forEach user.albums.data, (album)-> 
-                    if album?
-                        console.log album
-                        $.merge photos, album.photos.data if $.merge photos, album?
+                    $.merge photos, album.photos.data if album.photos?
 
             User.set 'user_photos_data_raw', photos
             
