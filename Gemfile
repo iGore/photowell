@@ -14,7 +14,7 @@ group :development do
 	gem 'coffee-script'
 	gem 'rb-fsevent'
 	gem 'rb-inotify', '>= 0.8.8'
-	gem 'compass', '0.11.5'
+	gem 'compass', '0.12.2'
 	gem 'sass', '3.1.5'
 	gem 'guard-compass'
 	gem 'guard-process'
