@@ -15,7 +15,7 @@ group :development do
 	gem 'rb-fsevent'
 	gem 'rb-inotify', '>= 0.8.8'
 	gem 'compass', '0.12.2'
-	gem 'sass', '3.5.0'
+	gem 'sass', '3.7.4'
 	gem 'guard-compass'
 	gem 'guard-process'
 	gem 'guard-livereload', '>= 2.5.2'
